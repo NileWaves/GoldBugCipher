@@ -9,13 +9,13 @@ My ship is fast sinking with a treasure
 on board. I am where it is marked * on 
 the enclosed chart."""
 
-sample_text2 = """DECIPHER ME:
+sample_text2 = """READ ME:
 5 3‡‡† 305)) 6* ;48 26)4‡.') 4‡);80 
-6* ;48 †8¶60') )85; 1‡(;:-‡*8 †83(88) 
+6* ;48 †8¶60') )85; 1‡(;: ‡*8 †83(88) 
 5*† ;46(;88* 96*?;8) *‡(;485); 5*† 
 2: *‡(;4 956* 2(5*-4 )8¶8*;4 0692 
 85); )6†8 )4‡‡; 1(‡9 ;48 081; 8:8 ‡1 
-;48 †85;4')-485† 5 288 06*8 1(‡9 ;48 
+;48 †85;4') 485† 5 288 06*8 1(‡9 ;48 
 ;(88 ;4(‡?34 ;48 )4‡; 161;: 188; ‡?;"""
 
 layout = [
@@ -35,14 +35,20 @@ layout = [
         ),
         sg.Text("", text_color=("red"), key="-ERROR-"),
     ],
-    [sg.Sizer(70, 2), sg.Button("Gold-bug"), sg.Image()],
+    [
+        sg.Sizer(70, 2),
+        sg.Button("Gold-bug"),
+        sg.Image(),
+        sg.Sizer(500, 2),
+        sg.Text("", key="-REMINDER-"),
+    ],
     [
         sg.Text("Plaintext:  "),
         sg.Multiline(sample_text, key="-INPUT-", size=(70, 15)),
         sg.Text("Ciphertext:  "),
         sg.Multiline(sample_text2, key="-INPUT2-", size=(70, 15)),
     ],
-    [sg.Sizer(290, 2), sg.Ok("Encrypt"), sg.Sizer(540, 2), sg.Ok("Decrypt")],
+    [sg.Sizer(290, 2), sg.Button("Encrypt"), sg.Sizer(540, 2), sg.Button("Decrypt")],
     [
         sg.Text("Ciphertext: "),
         sg.Output(key="-OUTPUT-", size=(70, 15)),
@@ -66,7 +72,12 @@ while True:
         break
 
     if event == "Gold-bug":
-        window["-CIPHER-"].update(value=("".join(gold_bug_ls)))
+        window["-CIPHER-"].update(value=(gold_bug_str_join))
+        reminder = (
+            "Gold-bug may erroneously convert some symbols and numbers into letters when deciphering.\n"
+            "Therefore, it is recommended that you compose your original plaintext with the 26 letters only."
+        )
+        window["-REMINDER-"].update(value=reminder)
 
     if event == "Shuffle":
         # create a new list of alphabet
@@ -75,38 +86,41 @@ while True:
         # concactenate to a single string
         cipher = "".join(cipher)
         window["-CIPHER-"].update(value=cipher)
+        window["-REMINDER-"].update(value="")
 
     if event == "Encrypt":
-        rotor = values["-CIPHER-"]
-        plaintext = values["-INPUT-"]
+        cipher = values["-CIPHER-"]
+        input = values["-INPUT-"]
 
         # check if cipher alphabet contains 26* unique* letters*
-        if len(rotor) != 26 or not unique_characters(rotor) or not is_allowed(rotor):
+        if len(cipher) != 26 or not unique_characters(cipher) or not is_allowed(cipher):
             error_msg = """Error: cipher alphabet must contain 26* unique* letters*,
             unless it is the gold-bug cipher."""
             window["-ERROR-"].update(value=error_msg)
-            rotor = alphabet.copy()
-            rotor = "".join(rotor)
+            cipher = alphabet.copy()
+            cipher = "".join(cipher)
         else:
             window["-ERROR-"].update(value="")
         # update the output box with encoded text
-        ciphertext = encrypt(rotor, plaintext)
-        window["-OUTPUT-"].update(value=ciphertext)
+        output = encrypt(cipher, input)
+        window["-OUTPUT-"].update(value=output)
 
     if event == "Decrypt":
-        rotor = values["-CIPHER-"]
-        ciphertext = values["-INPUT2-"]
+        cipher = values["-CIPHER-"]
+        input2 = values["-INPUT2-"]
+        print(cipher == gold_bug_str_join)
 
-        if len(rotor) != 26 or not unique_characters(rotor) or not is_allowed(rotor):
+        if len(cipher) != 26 or not unique_characters(cipher) or not is_allowed(cipher):
             error_msg = """Error: cipher alphabet must contain 26* unique* letters*,
             unless it is the gold-bug cipher."""
             window["-ERROR-"].update(value=error_msg)
-            rotor = alphabet.copy()
-            rotor = "".join(rotor)
+            cipher = alphabet.copy()
+            cipher = "".join(cipher)
+
         else:
             window["-ERROR-"].update(value="")
         # update the output box with decoded text
-        plaintext = decrypt(rotor, ciphertext)
-        window["-OUTPUT2-"].update(value=plaintext)
+        output2 = decrypt(cipher, input2)
+        window["-OUTPUT2-"].update(value=output2)
 
 window.close()

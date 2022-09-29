@@ -7,22 +7,7 @@ sample_text = """Jan 1 1864
 I am John Jones who writes this letter. 
 My ship is fast sinking with a treasure 
 on board. I am where it is marked * on 
-the enclosed chart.
-             /V\
-   / \/   \/    /__
-  )                "-+._
- ."                      \
-(       B R A S I L       )
- \                      /
-   \__                 (
-      >_               )
-        \_.           /
-           <         /
-*          \      _/
-             >     º
-            /    /
-           <    /
-            "^./"""
+the enclosed chart."""
 
 sample_text2 = """READ ME:
 5 3‡‡† 305)) 6* ;48 26)4‡.') 4‡);80 

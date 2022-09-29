@@ -87,6 +87,3 @@ def is_allowed(str):
         if x not in alphabet and x not in gold_bug_ls:
             return False
         return True
-
-
-encrypt("ABC", "ABC")

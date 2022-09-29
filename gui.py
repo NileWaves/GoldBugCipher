@@ -75,7 +75,7 @@ while True:
         window["-CIPHER-"].update(value=(gold_bug_str_join))
         reminder = (
             "Gold-bug may erroneously convert some symbols and numbers into letters when deciphering.\n"
-            "Therefore, it is recommended that you compose your original plaintext with the 26 letters only."
+            "Therefore, it is recommended that the original plaintext only ontains the 26 letters."
         )
         window["-REMINDER-"].update(value=reminder)
 
